@@ -54,6 +54,7 @@ class Rapala:
         A wait is initialized with a 5 second timeout
         """
         options = Options()
+        options.add_argument("--headless")
         options.add_experimental_option("prefs", self.prefs)
 
         driver = webdriver.Chrome(service=service, options=options)
@@ -79,7 +80,7 @@ class Rapala:
         #driver.wait.until(EC.visibility_of_element_located((By.TAG_NAME, 'p')))
         # grab & parse page html
         content = self.driver.page_source
-        soup = bs(content)
+        soup = bs(content, features="html.parser")
         
         # loop over individual p-elements 
         # & write their text to file
