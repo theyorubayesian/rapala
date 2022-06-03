@@ -7,29 +7,31 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 import time
+from typing import Any, Dict, List
 
 
 class Rapala:
     def __init__(
         self,
-        chrome_path=None,
-        prefs=None,
-        filename=None,
-        unallowed_tokens=None,
-        source_to_start_from=None,
-        page_to_start_from=None,
-        article_to_start_from=None,
-    ):
+        chrome_path: str = None,
+        prefs: Dict[str:Any] = None,
+        filename: str = None,
+        unallowed_tokens: List = None,
+        source_to_start_from: int = None,
+        page_to_start_from: int = None,
+        article_to_start_from: int = None,
+    ) -> None:
+        """ """
         self.page_to_start_from = page_to_start_from or 0
         self.article_to_start_from = article_to_start_from or 0
         self.source_to_start_from = source_to_start_from or 0
 
         self.chrome_path = chrome_path
-        # disable images in browser. For faster loading.
+
+        # disable images in browser for faster loading.
         self.prefs = prefs or {"profile.managed_default_content_settings.images": 2}
         self.driver = None
 
-        # self.load_more_button_path = "/html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/p/a"
         self.first_article_path = (
             './/*[@id="content"]/div[1]/div/div/div/div[1]/div[2]/div/ul[1]/li/div/div/a/h4'
             or "/html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[1]/li/div/div/a/h4"
@@ -74,7 +76,7 @@ class Rapala:
         )
         self.file = open(self.filename, "w+", encoding="utf-8")
 
-    def init_driver(self):
+    def init_driver(self) -> webdriver:
         """
         This func initializes the webdriver and disables images
         A wait is initialized with a 5 second timeout
@@ -89,17 +91,15 @@ class Rapala:
 
         return driver
 
-    def __write_article_to_text(self, sentences):
+    def __write_article_to_text(self, sentences: str) -> None:
         """
         This func write individual sentences to the file
         """
-        # split into individual sentences
         sentence_split = filter(None, sentences.split("."))
-        # write each individual sentences on a new line
         for s in sentence_split:
             self.file.write(s.strip() + "\n")
 
-    def __on_article_action(self):
+    def __on_article_action(self) -> None:
         """
         This func contains all actions that happen when an article is opened
         """
@@ -130,12 +130,13 @@ class Rapala:
             if line.text.strip() not in self.unallowed_tokens:
                 self.__write_article_to_text(line.text)
 
-    def open_article_and_collect(self, article_path):
+    def open_article_and_collect(self, article_path: str) -> None:
         """
         This func open an article on the same browser window,
         calls on_article_action and then returns to the index
         page.
         """
+
         # get link of article to be collected
         """link = self.driver.find_element_by_xpath(article_path).get_attribute("href")
         
@@ -155,10 +156,8 @@ class Rapala:
         # collect the article into file & increment articles_collected
         self.__on_article_action()
 
-        # return to main page
         self.driver.back()
         time.sleep(1)
-        # self.driver.switch_to.window(windows[0])
 
     def start(self):
         """
@@ -166,10 +165,10 @@ class Rapala:
         loop over all the sources and collect all articles
         into a file.
         """
+
         # initialize the driver
         self.driver = self.init_driver()
 
-        # loop over the individual sections of the site
         try:
             for i in range(self.source_to_start_from, len(self.sources)):
                 print("Collecting source: {}".format(self.sources[i]))
@@ -183,10 +182,8 @@ class Rapala:
                         if k == 0:
                             # collect the first article on the page
                             self.open_article_and_collect(self.first_article_path)
-                            # ensure that the rest of the code does not run
                             continue
                         elif k > 2:
-                            # scroll the article into view
                             self.driver.execute_script(
                                 "arguments[0].scrollIntoView();",
                                 self.driver.find_element(
@@ -194,7 +191,6 @@ class Rapala:
                                 ),
                             )
                             time.sleep(1)
-                        # collect the other articles on the page
                         self.open_article_and_collect(self.article_path.format(k))
             self.file.close()
             self.driver.close()
