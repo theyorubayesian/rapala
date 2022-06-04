@@ -36,8 +36,8 @@ class Rapala:
         self.prefs = prefs or {"profile.managed_default_content_settings.images": 2}
         self.driver = None
 
-        self.first_article_path = CONFIG['FIRST_ARTICLE_PATH1'] or CONFIG['FIRST_ARTICLE_PATH1']
-        self.article_path = CONFIG['ARTICLE_PATH1'] or CONFIG['ARTICLE_PATH1']
+        self.first_article_path = CONFIG['FIRST_ARTICLE_PATH1'] or CONFIG['FIRST_ARTICLE_PATH2']
+        self.article_path = CONFIG['ARTICLE_PATH1'] or CONFIG['ARTICLE_PATH2']
 
         self.sources = CONFIG['SOURCES']
 
