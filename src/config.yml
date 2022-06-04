@@ -20,7 +20,7 @@ PAGE_LIMIT:
    7: 101
 
 FIRST_ARTICLE_PATH1: .//*[@id="content"]/div[1]/div/div/div/div[1]/div[2]/div/ul[1]/li/div/div/a/h4
-FiRST_ARTICLE_PATH2:  /html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[1]/li/div/div/a/h4
+FIRST_ARTICLE_PATH2:  /html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[1]/li/div/div/a/h4
 
 ARTICLE_PATH1: .//*[@id="ordinaryItems"]/li[{}]/div/div/a/h4
 ARTICLE_PATH2: /html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[2]/li[{}]/div/div/a/h4
