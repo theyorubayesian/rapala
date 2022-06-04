@@ -1,0 +1,35 @@
+# VOA Swahili
+SOURCES:
+  - https://www.voaswahili.com/z/4658/?p={}
+  - https://www.voaswahili.com/z/4657/?p={}
+  - https://www.voaswahili.com/z/4660/?p={}
+  - https://www.voaswahili.com/z/4768/?p={}
+  - https://www.voaswahili.com/z/4659/?p={}
+  - https://www.voaswahili.com/z/2774/?p={}
+  - https://www.voaswahili.com/z/2775/?p={}
+  - https://www.voaswahili.com/z/2783/?p={}
+
+PAGE_LIMIT:
+   0: 101
+   1: 101
+   2: 59 
+   3: 38
+   4: 72
+   5: 101 
+   6: 101
+   7: 101
+
+FiRST_ARTICLE_PATH1: .//*[@id="content"]/div[1]/div/div/div/div[1]/div[2]/div/ul[1]/li/div/div/a/h4
+FiRST_ARTICLE_PATH2:  /html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[1]/li/div/div/a/h4
+
+ARTICLE_PATH1: .//*[@id="ordinaryItems"]/li[{}]/div/div/a/h4
+ARTICLE_PATH2: /html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[2]/li[{}]/div/div/a/h4
+
+TITLE_CLASS: col-title col-xs-12 col-lg-10 pull-right
+TITLE_CLASS2: title pg-title
+
+CATEGORY_CLASS: category js-category js-category--used
+
+
+
+                                  

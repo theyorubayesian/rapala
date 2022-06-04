@@ -7,14 +7,17 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 import time
+import yaml
 from typing import Any, Dict, List
 
+CONFIG = yaml.load(open("config.yml"), Loader=yaml.FullLoader)
 
 class Rapala:
     def __init__(
         self,
+        firefox_path: str = None,
         chrome_path: str = None,
-        prefs: Dict[str:Any] = None,
+        prefs: Dict[str, Any] = None,
         filename: str = None,
         unallowed_tokens: List = None,
         source_to_start_from: int = None,
@@ -26,43 +29,19 @@ class Rapala:
         self.article_to_start_from = article_to_start_from or 0
         self.source_to_start_from = source_to_start_from or 0
 
-        self.chrome_path = chrome_path
+        self.driver_path = chrome_path or firefox_path
+        
 
         # disable images in browser for faster loading.
         self.prefs = prefs or {"profile.managed_default_content_settings.images": 2}
         self.driver = None
 
-        self.first_article_path = (
-            './/*[@id="content"]/div[1]/div/div/div/div[1]/div[2]/div/ul[1]/li/div/div/a/h4'
-            or "/html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[1]/li/div/div/a/h4"
-        )
-        self.article_path = (
-            './/*[@id="ordinaryItems"]/li[{}]/div/div/a/h4'
-            or "/html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[2]/li[{}]/div/div/a/h4"
-        )
+        self.first_article_path = CONFIG['FIRST_ARTICLE_PATH1'] or CONFIG['FIRST_ARTICLE_PATH1']
+        self.article_path = CONFIG['ARTICLE_PATH1'] or CONFIG['ARTICLE_PATH1']
 
-        self.sources = [
-            "https://www.voaswahili.com/z/4658/?p={}",
-            "https://www.voaswahili.com/z/4657/?p={}",
-            "https://www.voaswahili.com/z/4660/?p={}",
-            "https://www.voaswahili.com/z/4768/?p={}",
-            "https://www.voaswahili.com/z/4659/?p={}",
-            "https://www.voaswahili.com/z/2774/?p={}",
-            "https://www.voaswahili.com/z/2775/?p={}",
-            "https://www.voaswahili.com/z/2783/?p={}",
-        ]
+        self.sources = CONFIG['SOURCES']
 
-        # sources_page_limit now properly addressed
-        self.sources_page_limit = {
-            0: 101,
-            1: 101,
-            2: 59,
-            3: 38,
-            4: 72,
-            5: 101,
-            6: 101,
-            7: 101,
-        }
+        self.sources_page_limit =  CONFIG['PAGE_LIMIT']
 
         self.unallowed_tokens = unallowed_tokens or [
             "Print",
@@ -84,7 +63,7 @@ class Rapala:
         options = Options()
         options.add_argument("--headless")
         options.add_experimental_option("prefs", self.prefs)
-        service = Service(self.chrome_path)
+        service = Service(self.driver_path)
         driver = webdriver.Chrome(service=service, options=options)
         # define a generic wait to be used throughout
         driver.wait = WebDriverWait(driver, 5)
@@ -103,24 +82,23 @@ class Rapala:
         """
         This func contains all actions that happen when an article is opened
         """
-        # driver.wait.until(EC.visibility_of_element_located((By.TAG_NAME, 'p')))
-        # grab & parse page html
+        
         content = self.driver.page_source
         soup = bs(content)
-        # included to write article title and category into file
+       
         title = None
 
         if title:
             title = soup.find(
-                "div", attrs={"class": "col-title col-xs-12 col-lg-10 pull-right"}
+                "div", attrs={"class": CONFIG['TITLE_CLASS1']}
             ).text.strip()
             self.__write_article_to_text(title)
         elif title == None:
-            title = soup.find("h1", attrs={"class": "title pg-title"}).text.strip()
+            title = soup.find("h1", attrs={"class": CONFIG['TITLE_CLASS2']}).text.strip()
             self.__write_article_to_text(title)
 
         category = soup.find(
-            "div", attrs={"class": "category js-category js-category--used"}
+            "div", attrs={"class": CONFIG['CATEGORY_CLASS']}
         ).text.strip()
         self.__write_article_to_text(category)
         # loop over individual p-elements
@@ -138,24 +116,13 @@ class Rapala:
         """
 
         # get link of article to be collected
-        """link = self.driver.find_element_by_xpath(article_path).get_attribute("href")
-        
-        # open article in new window and switch to it 
-        self.driver.execute_script("window.open('{}')".format(link))
-        time.sleep(1)
-        windows = self.driver.window_handles
-        self.driver.switch_to.window(windows[1])
-        time.sleep(1)"""
         WebElement
         button = WebDriverWait(self.driver, 15).until(
             EC.visibility_of_element_located((By.XPATH, article_path))
         )
         button.click()
-        # open the article in same window
-        # self.driver.find_element_by_xpath(article_path).click()
-        # collect the article into file & increment articles_collected
+    
         self.__on_article_action()
-
         self.driver.back()
         time.sleep(1)
 
