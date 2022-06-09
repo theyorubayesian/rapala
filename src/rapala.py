@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service
@@ -29,15 +28,15 @@ class Rapala:
         self.article_to_start_from = article_to_start_from or 0
         self.source_to_start_from = source_to_start_from or 0
 
-        self.driver_path = chrome_path or firefox_path
-        
+        self.chrome_path = chrome_path 
+        self.firefox_path = firefox_path
 
         # disable images in browser for faster loading.
         self.prefs = prefs or {"profile.managed_default_content_settings.images": 2}
         self.driver = None
 
-        self.first_article_path = CONFIG['FIRST_ARTICLE_PATH1'] or CONFIG['FIRST_ARTICLE_PATH2']
-        self.article_path = CONFIG['ARTICLE_PATH1'] or CONFIG['ARTICLE_PATH2']
+        self.first_article_path = CONFIG['FIRST_ARTICLE_PATH1'] or CONFIG['FIRST_ARTICLE_PATH1']
+        self.article_path = CONFIG['ARTICLE_PATH1'] or CONFIG['ARTICLE_PATH1']
 
         self.sources = CONFIG['SOURCES']
 
@@ -60,11 +59,22 @@ class Rapala:
         This func initializes the webdriver and disables images
         A wait is initialized with a 5 second timeout
         """
-        options = Options()
-        options.add_argument("--headless")
-        options.add_experimental_option("prefs", self.prefs)
-        service = Service(self.driver_path)
-        driver = webdriver.Chrome(service=service, options=options)
+    
+        if self.firefox_path:
+            from selenium.webdriver.firefox.options import Options
+
+            options = Options()
+            options.add_argument("--headless")
+            options.add_experimental_option("prefs", self.prefs)
+            service = Service(self.firefox_path)
+            driver = webdriver.Firefox(service=service, options=options)
+        else:
+            from selenium.webdriver.chrome.options import Options
+            options = Options()
+            options.add_argument("--headless")
+            options.add_experimental_option("prefs", self.prefs)
+            service = Service(self.chrome_path)
+            driver = webdriver.Chrome(service=service, options=options)
         # define a generic wait to be used throughout
         driver.wait = WebDriverWait(driver, 5)
 
