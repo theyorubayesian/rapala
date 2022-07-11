@@ -25,8 +25,8 @@ FIRST_ARTICLE_PATH2:  /html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/di
 ARTICLE_PATH1: .//*[@id="ordinaryItems"]/li[{}]/div/div/a/h4
 ARTICLE_PATH2: /html/body/div[2]/div/div[4]/div/div/div/div/div/div[2]/div/ul[2]/li[{}]/div/div/a/h4
 
-TITLE_CLASS: col-title col-xs-12 col-lg-10 pull-right
-TITLE_CLASS2: title pg-title
+TITLE_CLASS: title pg-title
+TITLE_CLASS2: col-title col-xs-12 col-lg-10 pull-right
 
 CATEGORY_CLASS: category js-category js-category--used
 
