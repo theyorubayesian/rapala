@@ -218,13 +218,13 @@ class Rapala:
                             time.sleep(1)
                         self.open_article_and_collect(self.article_path.format(k))
             self.file.close()
-            # self.driver.close()
+            self.driver.close()
             print(
                 "O ti pari! The end l'opin cinema. I love you lo n gbeyin mills and boon."
             )
         except Exception as e:
             self.file.close()
-            # self.driver.close()
+            self.driver.close()
             print("Failed after: Source {} Page {} Article {}".format(i, j, k))
             raise e
 
