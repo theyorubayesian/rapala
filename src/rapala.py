@@ -90,7 +90,7 @@ class Rapala:
         self.driver = None
 
         self.first_article_path = CONFIG['FIRST_ARTICLE_PATH1'] or CONFIG['FIRST_ARTICLE_PATH2'] 
-        self.article_path = CONFIG['ARTICLE_PATH1'] or CONFIG['ARTICLE_PATH2'] or CONFIG['ART']
+        self.article_path = CONFIG['ARTICLE_PATH1'] or CONFIG['ARTICLE_PATH2'] 
         self.sources = CONFIG['SOURCES']
 
         self.sources_page_limit =  CONFIG['PAGE_LIMIT']
