@@ -120,7 +120,8 @@ class Rapala:
         option_dict = {"firefox_driver": firefox_options, "chrome_driver": chrome_options}
         service_dict = {"firefox_driver": Firefox_Service, "chrome_driver": Chrome_Service}
 
-        # option_dict[self.driver_type].add_argument("--headless")
+        option_dict[self.driver_type].add_argument("--window-size=1920x1080")
+        option_dict[self.driver_type].add_argument("--headless")
         option_dict[self.driver_type].add_experimental_option("prefs", self.prefs)
         service = service_dict[self.driver_type](self.driver_path)
         driver = driver_dict[self.driver_type](service=service, options=option_dict[self.driver_type])
@@ -218,13 +219,13 @@ class Rapala:
                             time.sleep(1)
                         self.open_article_and_collect(self.article_path.format(k))
             self.file.close()
-            # self.driver.close()
+            self.driver.close()
             print(
                 "O ti pari! The end l'opin cinema. I love you lo n gbeyin mills and boon."
             )
         except Exception as e:
             self.file.close()
-            # self.driver.close()
+            self.driver.close()
             print("Failed after: Source {} Page {} Article {}".format(i, j, k))
             raise e
 
