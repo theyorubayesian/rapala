@@ -1,8 +1,26 @@
-ARTICLE_DATE_SPAN_CLASS: "date date--mb date--size-3"
-HEADLINE_TAG_CLASS: "title pg-title"
-ARTICLE_DIV_CLASS: "col-xs-12 col-sm-12 col-md-8 col-lg-8 pull-left bottom-offset content-offset"
+ARTICLE_DATE_SPAN_CLASS: 
+  - "date date--mb date--size-3"
+  - "date date--mb date--size-2"
+HEADLINE_TAG_CLASS:
+  - "title pg-title"
+ARTICLE_DIV_CLASS:
+  - "col-xs-12 col-sm-12 col-md-8 col-lg-8 pull-left bottom-offset content-offset"
+  - "content-floated-wrap fb-quotable"
+  - "wsw accordeon__target"
+  - "container container--featured m-t-md"
 
 CATEGORY_URLS:
+  afr:
+    SPORTS: https://www.voaafrique.com/z/4016/
+    ETATS-UNIS: https://www.voaafrique.com/z/2881/
+    AFRIQUE: https://www.voaafrique.com/afrique/
+  amh:
+    ኢትዮጵያ/ኤርትራ: https://amharic.voanews.com/z/3661/
+    አፍሪካ: https://amharic.voanews.com/z/3169/
+    ዓለም አቀፍ: https://amharic.voanews.com/z/3737/
+    መካከለኛው ምሥራቅ: https://amharic.voanews.com/z/5281/
+  bam:
+    MONDE: https://www.voabambara.com/z/5988/
   hau: 
     NAJERIYA: https://www.voahausa.com/z/2866/
     BABBAN_TARON: https://www.voahausa.com/z/7357/
@@ -15,6 +33,31 @@ CATEGORY_URLS:
     WASANNI: https://www.voahausa.com/z/2869/
     WORLD_CUP_2022_QATAR: https://www.voahausa.com/z/7275/
     # RAHOTANNIN_LAFIYARMU: https://www.voahausa.com/z/6878/
+  kin:
+    BURUNDI: https://www.radiyoyacuvoa.com/z/4028/
+    RWANDA: https://www.radiyoyacuvoa.com/z/4027/
+    MURI AFURIKA: https://www.radiyoyacuvoa.com/z/2667/
+    KWISI: https://www.radiyoyacuvoa.com/z/2681/
+  nde:
+    EZEZIMBABWE: https://www.voandebele.com/z/4783/
+    EZEAFRICA: https://www.voandebele.com/z/3179/
+    EZEMIDLALO: https://www.voandebele.com/z/3189/
+    EZOMHLABA: https://www.voandebele.com/z/3258/
+    IMIBONO KAHULUMENDE WEMELIKA: https://editorials.voa.gov/z/6223/
+  orm:
+    OROMIYAA: https://www.voaafaanoromoo.com/z/4927/
+    ITIYOOPHIYAA: https://www.voaafaanoromoo.com/z/3319/
+    AFRIKAA: https://www.voaafaanoromoo.com/z/3222/
+    ADDUNYAA: https://www.voaafaanoromoo.com/z/3227/
+    IBSA_GULAALAA_MOOTUMMAA_YUNAAYTID_ISTEETS: https://editorials.voa.gov/z/6218/
+  som:
+    SOOMAALIYA: https://www.voasomali.com/z/2616/
+    BARNAAMIJYADA TODDOBAADKA: https://www.voasomali.com/z/3069/
+    BARNAAMIJYADA GAARKA AH: https://www.voasomali.com/z/3456/
+    MARAYKANKA: https://www.voasomali.com/z/2611/
+    AFRIKA: https://www.voasomali.com/z/2610/
+    CAALAMKA: https://www.voasomali.com/z/2618/
+    BANDHIGGA VOA: https://www.voasomali.com/z/5596/
   swa:
     AFRIKA: https://www.voaswahili.com/z/2774/
     BURUNDI: https://www.voaswahili.com/burundi/
@@ -27,4 +70,10 @@ CATEGORY_URLS:
     RWANDA: https://www.voaswahili.com/z/4768/
     TANZANIA: https://www.voaswahili.com/z/4657/
     UGANDA: https://www.voaswahili.com/z/4659/
-
+  tir:
+    ቀርኒ ኣፍሪቃ: https://tigrigna.voanews.com/z/5444/
+    ዓለም: https://tigrigna.voanews.com/world
+    ፖለቲካ: https://tigrigna.voanews.com/p/7830.html
+    ጥዕና: https://tigrigna.voanews.com/p/7831.html
+    መንእሰያት: https://tigrigna.voanews.com/p/7832.html
+    ኤርትራውያን ኣብ ኣመሪካ: https://tigrigna.voanews.com/p/7834.html
