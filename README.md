@@ -12,12 +12,12 @@ This project, `Rapala` is a VOA News Scraper that combines multiprocessing and m
 | Bambara | bam | http://www.voabambara.com/ |
 | Hausa | hau | https://www.voahausa.com/ |
 | Kinyarwanda | kin | https://www.radiyoyacuvoa.com/ |
-<!-- | Lingala | lin | https://www.voalingala.com/ | -->
 | Ndebele | nde | https://www.voandebele.com/ |
-<!-- | Shona | sna | www.voashona.com | -->
 | Somali | som | https://www.voasomali.com/ |
 | Swahili | swa | https://www.voaswahili.com/ |
 | Tigrinya | tir | https://tigrigna.voanews.com/ |
+<!-- | Lingala | lin | https://www.voalingala.com/ | -->
+<!-- | Shona | sna | www.voashona.com | -->
 <!-- | Zimbabwe | zim | https://www.voazimbabwe.com/ | -->
 
 This scraper works fine as of `25th of December, 2022`.
