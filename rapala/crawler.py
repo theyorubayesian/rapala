@@ -21,7 +21,8 @@ async def get_all_urls(
     category_url: str, 
     collected_urls: Set[str], 
     article_url_template: Template, 
-    month_map: Dict[str, str], q: Queue,
+    month_map: Dict[str, str], 
+    url_queue: Queue,
     time_delay: float = 3
 ) -> None:
     global collected_all_urls
@@ -33,7 +34,7 @@ async def get_all_urls(
         for url in article_urls:
             if url not in collected_urls:
                 collected_urls.add(url)
-                await q.put(url)
+                await url_queue.put(url)
 
         last_date = None
         date_template = Template(category_url + "$date")
@@ -52,7 +53,7 @@ async def get_all_urls(
             for url in article_urls:
                 if url not in collected_urls:
                     collected_urls.add(url)
-                    await q.put(url)
+                    await url_queue.put(url)
             
             last_date = next_date
 
@@ -74,7 +75,7 @@ async def get_all_articles(
                     collected_all_articles = True
                     return
                 else:
-                    pass
+                    await asyncio.sleep(time_delay * factor())
             else:
                 await get_article_data(
                     session, 
@@ -108,7 +109,7 @@ async def write_articles_to_file(
                 if collected_all_articles:
                     return
                 else:
-                    pass
+                    await asyncio.sleep(1.3 * factor())
             else:
                 writer.writerow(article_data)
                 story_num += 1
@@ -126,6 +127,7 @@ async def write_articles_to_file(
                         f"Collected requested number of articles: {story_num} "
                         "for category: {article_data['category']}"
                     )
+                    return
 
 
 async def run_all(
