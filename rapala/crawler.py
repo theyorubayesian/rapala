@@ -11,6 +11,7 @@ import yaml
 
 from rapala.helpers import *
 
+SENTINEL = "STOP"
 CONFIG = yaml.load(open("config.yml"), Loader=yaml.FullLoader)
 ALL_CATEGORIES = CONFIG["CATEGORY_URLS"]
 
@@ -26,8 +27,6 @@ async def get_all_urls(
     url_queue: Queue,
     time_delay: float = 3
 ) -> None:
-    global collected_all_urls
-
     async with aiohttp.ClientSession() as session:
         if start_date:
             dated_url = category_url + start_date
@@ -48,7 +47,7 @@ async def get_all_urls(
         while True:
             next_date = get_next_date(page_soup, month_map, last_date, CONFIG["ARTICLE_DATE_SPAN_CLASS"])
             if next_date is None:
-                collected_all_urls = True
+                await url_queue.put(SENTINEL)
                 return
             
             url = date_template.substitute(date=next_date)
@@ -70,29 +69,24 @@ async def get_all_articles(
     data_queue: Queue,
     time_delay: float = 3.4
 ) -> None:
-    global collected_all_urls, collected_all_articles
-
     async with aiohttp.ClientSession() as session:
         while True:
-            try:
-                article_url = await url_queue.get()
-            except asyncio.QueueEmpty:
-                if collected_all_urls:
-                    collected_all_articles = True
-                    return
-                else:
-                    await asyncio.sleep(time_delay * factor())
-            else:
-                await get_article_data(
-                    session, 
-                    article_url, 
-                    category, 
-                    data_queue, 
-                    CONFIG["HEADLINE_TAG_CLASS"],
-                    CONFIG["ARTICLE_DIV_CLASS"]
-                )
+            article_url = await url_queue.get()
+            if article_url == SENTINEL:
                 url_queue.task_done()
-                await asyncio.sleep(time_delay * factor())
+                await data_queue.put(SENTINEL)
+                break
+
+            await get_article_data(
+                session, 
+                article_url, 
+                category, 
+                data_queue, 
+                CONFIG["HEADLINE_TAG_CLASS"],
+                CONFIG["ARTICLE_DIV_CLASS"]
+            )
+            url_queue.task_done()
+            await asyncio.sleep(time_delay * factor())
 
 
 async def write_articles_to_file(
@@ -100,8 +94,6 @@ async def write_articles_to_file(
     data_queue: Queue,
     total_num_articles: int
 ) -> None:
-    global collected_all_articles
-
     with open(output_file_name, "w", encoding="utf-8") as csv_file:
         headers = ["headline", "content", "category", "url"]
         writer = csv.DictWriter(csv_file, delimiter="\t", fieldnames = headers, lineterminator='\n')
@@ -109,31 +101,28 @@ async def write_articles_to_file(
 
         story_num = 0
         while True:
-            try:
-                article_data = await data_queue.get()
-            except asyncio.QueueEmpty:
-                if collected_all_articles:
-                    return
-                else:
-                    await asyncio.sleep(1.3 * factor())
-            else:
-                writer.writerow(article_data)
-                story_num += 1
-
+            article_data = await data_queue.get()
+            if article_data == SENTINEL:
                 data_queue.task_done()
+                break
 
-                if story_num % 500 == 0:
-                    print(f"Written {story_num} articles to file")
+            writer.writerow(article_data)
+            story_num += 1
 
-                if total_num_articles > 0 and story_num >= total_num_articles:
-                    running_tasks = asyncio.all_tasks()
-                    running_tasks.remove(asyncio.current_task())
-                    [task.cancel() for task in running_tasks]
-                    print(
-                        f"Collected requested number of articles: {story_num} "
-                        "for category: {article_data['category']}"
-                    )
-                    return
+            data_queue.task_done()
+
+            if story_num % 500 == 0:
+                print(f"Written {story_num} articles to file")
+
+            if total_num_articles > 0 and story_num >= total_num_articles:
+                running_tasks = asyncio.all_tasks()
+                running_tasks.remove(asyncio.current_task())
+                [task.cancel() for task in running_tasks]
+                print(
+                    f"Collected requested number of articles: {story_num} "
+                    "for category: {article_data['category']}"
+                )
+                break
 
 
 async def run_all(
@@ -146,10 +135,6 @@ async def run_all(
     month_map: Dict[str, str]
 ) -> None:
     tasks = []
-    global collected_all_articles, collected_all_urls
-    collected_all_urls = False
-    collected_all_articles = False
-    
     article_url_queue = Queue()
     article_data_queue = Queue()
     collected_urls = set()
@@ -165,6 +150,9 @@ async def run_all(
     tasks = [get_article_data_task, get_article_url_task, write_article_data_task]
 
     await asyncio.gather(*tasks, return_exceptions=True)
+
+    await article_url_queue.join()
+    await article_data_queue.join()
 
     return
 
