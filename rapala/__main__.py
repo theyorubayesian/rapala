@@ -2,6 +2,7 @@ import argparse
 import glob
 import multiprocessing
 import os
+from datetime import datetime
 from functools import partial
 from string import Template
 
@@ -51,6 +52,11 @@ def get_parser() -> argparse.ArgumentParser:
              "If -1, we scrape all articles we find",
         )
     parser.add_argument(
+        "--start_date",
+        type=str,
+        help="Date in format YEAR/MONTH/DAY (e.g. 2022/12/25) where collection should start"
+    )
+    parser.add_argument(
         "--cleanup",
         action="store_true",
         help="Remove sub-topic TSV files created after combining them into final corpora"
@@ -88,13 +94,14 @@ if __name__ == "__main__":
                 url,
                 category,
                 articles_per_category,
+                args.start_date,
                 f"data/{clean_string(category)}_{args.output_file_name}",
                 article_template,
                 month_map
             )
         ) for category, url in categories.items()
     ]
-
+ 
     result = [p.get() for p in processes]
 
     output_file_pattern = f"data/*_{args.output_file_name}"
@@ -103,7 +110,7 @@ if __name__ == "__main__":
     reader = partial(pd.read_csv, sep="\t", lineterminator="\n")
     all_dfs = map(reader, category_file_names)
     corpora = pd.concat(all_dfs).drop_duplicates(subset="url", keep="last")
-    corpora.to_csv(args.output_file_name, sep="\t", index=False)
+    corpora.to_csv(f"data/{args.output_file_name}", sep="\t", index=False)
 
     if args.cleanup:
         for f in category_file_names:

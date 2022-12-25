@@ -19,7 +19,8 @@ factor = lambda: random.uniform(0.89, 1.19)
 
 async def get_all_urls(
     category_url: str, 
-    collected_urls: Set[str], 
+    collected_urls: Set[str],
+    start_date: str,
     article_url_template: Template, 
     month_map: Dict[str, str], 
     url_queue: Queue,
@@ -28,7 +29,12 @@ async def get_all_urls(
     global collected_all_urls
 
     async with aiohttp.ClientSession() as session:
-        page_soup = await get_page_soup(session, category_url)
+        if start_date:
+            dated_url = category_url + start_date
+            page_soup = await get_page_soup(session, dated_url)
+        else:
+            page_soup = await get_page_soup(session, category_url)
+        
         article_urls = get_valid_urls(page_soup, article_url_template)
         
         for url in article_urls:
@@ -134,18 +140,22 @@ async def run_all(
     category_url: str, 
     category: str, 
     output_file: str,
+    start_date: str,
     total_num_articles: int,
     template: Template, 
     month_map: Dict[str, str]
 ) -> None:
     tasks = []
+    global collected_all_articles, collected_all_urls
+    collected_all_urls = False
+    collected_all_articles = False
     
     article_url_queue = Queue()
     article_data_queue = Queue()
     collected_urls = set()
 
     get_article_url_task = asyncio.create_task(
-        get_all_urls(category_url, collected_urls, template, month_map, article_url_queue)
+        get_all_urls(category_url, collected_urls, start_date, template, month_map, article_url_queue)
     )
     get_article_data_task = asyncio.create_task(
         get_all_articles(category, article_url_queue, article_data_queue))
@@ -163,11 +173,12 @@ def main(
     category_url: str, 
     category: str,
     total_num_articles: int,
+    start_date: str,
     output_file: str, 
     template: Template, 
     month_map: Dict[str, str],
 ) -> None:
     asyncio.run(
-        run_all(category_url, category, output_file, total_num_articles, template, month_map)
+        run_all(category_url, category, output_file, start_date, total_num_articles, template, month_map)
     )
     return
