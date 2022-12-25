@@ -2,7 +2,6 @@ import argparse
 import glob
 import multiprocessing
 import os
-from datetime import datetime
 from functools import partial
 from string import Template
 
@@ -101,8 +100,9 @@ if __name__ == "__main__":
             )
         ) for category, url in categories.items()
     ]
- 
+
     result = [p.get() for p in processes]
+    print("Collected articles for all categories successfully! 😎")
 
     output_file_pattern = f"data/*_{args.output_file_name}"
     category_file_names = glob.glob(output_file_pattern)
@@ -111,6 +111,8 @@ if __name__ == "__main__":
     all_dfs = map(reader, category_file_names)
     corpora = pd.concat(all_dfs).drop_duplicates(subset="url", keep="last")
     corpora.to_csv(f"data/{args.output_file_name}", sep="\t", index=False)
+
+    print(f"{len(corpora)} unique articles collected")
 
     if args.cleanup:
         for f in category_file_names:

@@ -12,6 +12,7 @@ import yaml
 from rapala.helpers import *
 
 SENTINEL = "STOP"
+LOG_template = Template("$time | $category | $msg")
 CONFIG = yaml.load(open("config.yml"), Loader=yaml.FullLoader)
 ALL_CATEGORIES = CONFIG["CATEGORY_URLS"]
 
@@ -92,7 +93,8 @@ async def get_all_articles(
 async def write_articles_to_file(
     output_file_name: str, 
     data_queue: Queue,
-    total_num_articles: int
+    total_num_articles: int,
+    category: str
 ) -> None:
     with open(output_file_name, "w", encoding="utf-8") as csv_file:
         headers = ["headline", "content", "category", "url"]
@@ -104,24 +106,26 @@ async def write_articles_to_file(
             article_data = await data_queue.get()
             if article_data == SENTINEL:
                 data_queue.task_done()
+                msg = "Collected all articles for category!"
+                print(LOG_template.substitute(time=str(datetime.now()), category=category, msg=msg))
                 break
 
             writer.writerow(article_data)
             story_num += 1
-
             data_queue.task_done()
 
             if story_num % 500 == 0:
-                print(f"Written {story_num} articles to file")
+                msg = f"Written {story_num} articles to file"
+                print(LOG_template.substitute(time=str(datetime.now()), category=category, msg=msg))
 
             if total_num_articles > 0 and story_num >= total_num_articles:
                 running_tasks = asyncio.all_tasks()
                 running_tasks.remove(asyncio.current_task())
                 [task.cancel() for task in running_tasks]
-                print(
-                    f"Collected requested number of articles: {story_num} "
-                    "for category: {article_data['category']}"
-                )
+
+                msg = f"Collected requested number of articles: {story_num}"
+                print(LOG_template.substitute(time=str(datetime.now()), category=category, msg=msg))
+
                 break
 
 
@@ -145,7 +149,7 @@ async def run_all(
     get_article_data_task = asyncio.create_task(
         get_all_articles(category, article_url_queue, article_data_queue))
     write_article_data_task = asyncio.create_task(
-        write_articles_to_file(output_file, article_data_queue, total_num_articles))
+        write_articles_to_file(output_file, article_data_queue, total_num_articles, category))
 
     tasks = [get_article_data_task, get_article_url_task, write_article_data_task]
 
