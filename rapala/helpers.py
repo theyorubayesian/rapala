@@ -94,10 +94,17 @@ async def get_article_data(
     
     for cls_name in article_content_container_class_name:
         story_container = page_soup.find("div", attrs={"class": cls_name})
-
+        content = ""
+        
         if story_container:
-            content = " ".join([p.text.strip().replace("\r", "").replace("\n", "\\n") for p in story_container.find_all("p")])
+            if story_container.find("p"):
+                content = " ".join([p.text.strip().replace("\r", "").replace("\n", "\\n") for p in story_container.find_all("p")])
+            else:
+                content = " ".join(story_container.stripped_strings)
             
+            if not content:
+                continue
+
             data = {
                 "headline": headline,
                 "content": content,

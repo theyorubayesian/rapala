@@ -26,8 +26,11 @@ async def get_all_urls(
     article_url_template: Template, 
     month_map: Dict[str, str], 
     url_queue: Queue,
+    end_date: str = None,
     time_delay: float = 3
 ) -> None:
+    global next_date
+    
     async with aiohttp.ClientSession() as session:
         if start_date:
             dated_url = category_url + start_date
@@ -47,7 +50,7 @@ async def get_all_urls(
 
         while True:
             next_date = get_next_date(page_soup, month_map, last_date, CONFIG["ARTICLE_DATE_SPAN_CLASS"])
-            if next_date is None:
+            if (next_date is None) or (next_date == end_date):
                 await url_queue.put(SENTINEL)
                 return
             
@@ -136,7 +139,8 @@ async def run_all(
     start_date: str,
     total_num_articles: int,
     template: Template, 
-    month_map: Dict[str, str]
+    month_map: Dict[str, str],
+    end_date: str = None
 ) -> None:
     tasks = []
     article_url_queue = Queue()
@@ -144,7 +148,7 @@ async def run_all(
     collected_urls = set()
 
     get_article_url_task = asyncio.create_task(
-        get_all_urls(category_url, collected_urls, start_date, template, month_map, article_url_queue)
+        get_all_urls(category_url, collected_urls, start_date, template, month_map, article_url_queue, end_date)
     )
     get_article_data_task = asyncio.create_task(
         get_all_articles(category, article_url_queue, article_data_queue))
@@ -166,11 +170,12 @@ def main(
     category: str,
     total_num_articles: int,
     start_date: str,
+    end_date: str,
     output_file: str, 
     template: Template, 
     month_map: Dict[str, str],
 ) -> None:
     asyncio.run(
-        run_all(category_url, category, output_file, start_date, total_num_articles, template, month_map)
+        run_all(category_url, category, output_file, start_date, total_num_articles, template, month_map, end_date)
     )
     return

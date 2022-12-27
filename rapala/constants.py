@@ -62,6 +62,8 @@ HAUSA_MONTH_MAP = {
 
 KINYARWANDA_MONTH_MAP = {}
 
+LINGALA_MONTH_MAP = AFRIQUE_MONTH_MAP
+
 NDEBELE_MONTH_MAP = {
     "zibandlela": 1,
     "nhlolanja": 2,
@@ -90,6 +92,21 @@ OROMOO_MONTH_MAP = {
     "onkoloolessa": 10,
     "sadaasaa": 11,
     "muddee": 12
+}
+
+SHONA_MONTH_MAP = {
+    "ndira": 1,
+    "kukadzi": 2,
+    "kurume": 3,
+    "kubvumbi": 4,
+    "chivabvu": 5,
+    "chikumi": 6,
+    "chikunguru": 7,
+    "nyamavhuvhu": 8,
+    "gunyana": 9,
+    "gumiguru": 10,
+    "mbudzi": 11,
+    "zvita": 12
 }
 
 SOMALIA_MONTH_MAP = {calendar.month_name[i].lower(): i for i in range(1, 13)}
@@ -130,8 +147,10 @@ MONTH_MAP = {
     "bam": BAMBARA_MONTH_MAP,
     "hau": HAUSA_MONTH_MAP,
     "kin": KINYARWANDA_MONTH_MAP,
+    "lin": LINGALA_MONTH_MAP,
     "nde": NDEBELE_MONTH_MAP,
     "orm": OROMOO_MONTH_MAP,
+    "sho": SHONA_MONTH_MAP,
     "som": SOMALIA_MONTH_MAP,
     "swa": SWAHILI_MONTH_MAP,
     "tir": TIGRINYA_MONTH_MAP
@@ -143,8 +162,10 @@ URLS = {
     "orm": "https://www.voaafaanoromoo.com",
     "bam": "https://www.voabambara.com",
     "hau": "https://www.voahausa.com",
-    "kin": "https://www.radiyoyacuvoa.com/",
+    "kin": "https://www.radiyoyacuvoa.com",
+    "lin": "https://www.voalingala.com",
     "nde": "https://www.voandebele.com",
+    "sho": "https://www.voashona.com",
     "som": "https://www.voasomali.com",
     "swa": "https://www.voaswahili.com",
     "tir": "https://tigrigna.voanews.com"

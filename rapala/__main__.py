@@ -56,6 +56,11 @@ def get_parser() -> argparse.ArgumentParser:
         help="Date in format YEAR/MONTH/DAY (e.g. 2022/12/25) where collection should start"
     )
     parser.add_argument(
+        "--end_date",
+        type=str,
+        help="Date in format YEAR/MONTH/DAY (e.g. 2022/12/25) where collection should start"
+    )
+    parser.add_argument(
         "--cleanup",
         action="store_true",
         help="Remove sub-topic TSV files created after combining them into final corpora"
@@ -94,6 +99,7 @@ if __name__ == "__main__":
                 category,
                 articles_per_category,
                 args.start_date,
+                args.end_date,
                 f"data/{clean_string(category)}_{args.output_file_name}",
                 article_template,
                 month_map
