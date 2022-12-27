@@ -150,7 +150,7 @@ MONTH_MAP = {
     "lin": LINGALA_MONTH_MAP,
     "nde": NDEBELE_MONTH_MAP,
     "orm": OROMOO_MONTH_MAP,
-    "sho": SHONA_MONTH_MAP,
+    "sna": SHONA_MONTH_MAP,
     "som": SOMALIA_MONTH_MAP,
     "swa": SWAHILI_MONTH_MAP,
     "tir": TIGRINYA_MONTH_MAP
@@ -165,7 +165,7 @@ URLS = {
     "kin": "https://www.radiyoyacuvoa.com",
     "lin": "https://www.voalingala.com",
     "nde": "https://www.voandebele.com",
-    "sho": "https://www.voashona.com",
+    "sna": "https://www.voashona.com",
     "som": "https://www.voasomali.com",
     "swa": "https://www.voaswahili.com",
     "tir": "https://tigrigna.voanews.com"
