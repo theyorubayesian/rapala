@@ -29,7 +29,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--language",
         type=str,
-        help="Language of BBC Website"
+        help="Language of VOA Website"
     )
     parser.add_argument(
         "--output_file_name", 
@@ -73,7 +73,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-if __name__ == "__main__":
+def main():
     parser = get_parser()
     args = parser.parse_args()
 
@@ -123,3 +123,7 @@ if __name__ == "__main__":
     if args.cleanup:
         for f in category_file_names:
             os.remove(f)
+
+
+if __name__ == "__main__":
+    main()
