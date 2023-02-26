@@ -155,7 +155,7 @@ async def run_all(
     write_article_data_task = asyncio.create_task(
         write_articles_to_file(output_file, article_data_queue, total_num_articles, category))
 
-    tasks = [get_article_data_task, get_article_url_task, write_article_data_task]
+    tasks = [get_article_url_task, get_article_data_task, write_article_data_task]
 
     await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -165,14 +165,14 @@ async def run_all(
     return
 
 
-def main(
+def crawl(
     category_url: str, 
     category: str,
     total_num_articles: int,
     start_date: str,
     end_date: str,
-    output_file: str, 
-    template: Template, 
+    output_file: str,
+    template: Template,
     month_map: Dict[str, str],
 ) -> None:
     asyncio.run(

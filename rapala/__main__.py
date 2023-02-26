@@ -9,7 +9,7 @@ import pandas as pd
 
 from rapala.constants import *
 from rapala.crawler import ALL_CATEGORIES
-from rapala.crawler import main
+from rapala.crawler import crawl
 from rapala.helpers import clean_string
 
 
@@ -90,10 +90,10 @@ def main():
     article_template = Template(URLS[args.language] + "$href")
     month_map = MONTH_MAP[args.language]
 
-    pool = multiprocessing.Pool()
+    pool = multiprocessing.Pool(processes=1)
     processes = [
         pool.apply_async(
-            main,
+            crawl,
             args=(
                 url,
                 category,
