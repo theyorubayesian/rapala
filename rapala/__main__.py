@@ -90,7 +90,7 @@ def main():
     article_template = Template(URLS[args.language] + "$href")
     month_map = MONTH_MAP[args.language]
 
-    pool = multiprocessing.Pool(processes=1)
+    pool = multiprocessing.Pool(processes=min(len(categories), multiprocessing.cpu_count()))
     processes = [
         pool.apply_async(
             crawl,
@@ -107,8 +107,11 @@ def main():
         ) for category, url in categories.items()
     ]
 
-    result = [p.get() for p in processes]
+    _ = [p.get() for p in processes]
     print("Collected articles for all categories successfully! 😎")
+
+    pool.close()
+    pool.join()
 
     output_file_pattern = f"data/*_{args.output_file_name}"
     category_file_names = glob.glob(output_file_pattern)
