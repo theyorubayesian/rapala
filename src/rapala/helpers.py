@@ -65,7 +65,7 @@ def get_next_date(page_soup: BeautifulSoup, month_map: dict, last_date: datetime
         return None
     
     try:
-        month, day, year = last_article_date_str.text.split("-")
+        day, month, year = last_article_date_str.text.split("-")
         last_article_date = datetime(int(year), int(month), int(day))
     except ValueError:
         month, day, year = last_article_date_str.text.lower().replace(",", "").split(" ")

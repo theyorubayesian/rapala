@@ -105,7 +105,11 @@ def main():
     worker_queue = manager.Queue()
     _ = [worker_queue.put(_id) for _id in worker_ids]
 
-    pool = Pool(processes=min(len(categories), cpu_count()), initializer=init_workers, initargs=(worker_queue, categories))
+    pool = Pool(
+        processes=min(len(categories), cpu_count()), 
+        initializer=init_workers, 
+        initargs=(worker_queue, categories)
+    )
 
     futures = [
         pool.apply_async(
