@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=64.0.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Rapala"
+description = "VOA News Scraper"
+readme = { file = "README.md", content-type = "text/markdown" }
+maintainers = [
+    { name = "Akintunde 'theyorubayesian' Oladipo", email = "akin.o.oladipo@gmail.com"}
+]
+requires-python = ">=3.8"
+dependencies = [
+    'beautifulsoup4==4.11.1',
+    'pandas==1.5.2',
+    'aiohttp==3.8.3',
+    'requests==2.28.1',
+    'ipykernel==6.19.4',
+    'PyYAML==6.0',
+]
+dynamic = [
+  "version",
+]
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: Apache Software License',
+    'Programming Language :: Python',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+]
+license = { text = "Apache-2.0" }
+
+[project.urls]
+Homepage = "https://github.com/theyorubayesian/rapala"
+
+[project.scripts]
+rapala = "rapala.__main__:main"

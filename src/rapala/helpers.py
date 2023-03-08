@@ -1,11 +1,19 @@
 from asyncio import Queue
 from datetime import datetime
 from datetime import timedelta
+from multiprocessing import current_process
+from queue import Queue as Q
 from string import Template
 from typing import  List
 
 import aiohttp
 from bs4 import BeautifulSoup
+
+
+def init_workers(q: Q, categories: dict) -> None:
+    global idx
+    idx = q.get()
+    print(f"Collecting articles for {list(categories.keys())[idx]} in worker process: {current_process().pid}")
 
 
 def clean_string(x: str) -> str:
